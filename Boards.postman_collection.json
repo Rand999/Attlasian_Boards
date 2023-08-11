@@ -1,0 +1,3016 @@
+{
+	"info": {
+		"_postman_id": "ebbe8f76-1e9d-4def-aa4d-a4246710eb70",
+		"name": "Boards",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16061681",
+		"_collection_link": "https://dark-satellite-812097.postman.co/workspace/Workspace---tasks~6c2ae8c1-e609-4b50-bef9-75e1980e1ac1/collection/16061681-ebbe8f76-1e9d-4def-aa4d-a4246710eb70?action=share&creator=16061681&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "Board - CRUD",
+			"item": [
+				{
+					"name": "1- Create board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"//console.log(JSON.parse(responseBody).id)\r",
+									"//I stored data backs to check them in GET.......................................................................................\r",
+									"pm.collectionVariables.set(\"boardid\",JSON.parse(responseBody).id);// get board id from the response\r",
+									"pm.collectionVariables.set(\"board_name\",JSON.parse(responseBody).name);\r",
+									"pm.collectionVariables.set(\"closed\",JSON.parse(responseBody).closed);\r",
+									"pm.collectionVariables.set(\"id_organization\",JSON.parse(responseBody).idOrganization);\r",
+									"pm.collectionVariables.set(\"permission\",JSON.parse(responseBody).prefs.permissionLevel);\r",
+									"\r",
+									"\r",
+									"\r",
+									"//check that the status code is 200.\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//check name is not null , this feild is required.\r",
+									"pm.test(\"Name feild is required\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check that the name as expected\r",
+									"pm.test(\"check that the name that backs the same name we send\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"board_name\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"//////////// check that name between 1 & 16384 char ////////////\r",
+									"\r",
+									"/*pm.test(\"check that name between 1 & 16384 char\",function(){\r",
+									"pm.expect(responseBody.name.length).to.be.lengthOf(1, 16384);\r",
+									"     \r",
+									"});*/\r",
+									"\r",
+									"//check that the name doesn't contain a number.\r",
+									"pm.test(\"check that the name doesn't contain a number\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).not.to.contain(/\\d+/);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"\r",
+									"////////////// Chcek title that returns doesn't contain a special char /////////\r",
+									"pm.test(\"Chcek title that returns doesn't contain a special char\",function(){\r",
+									" pm.expect(JSON.parse(responseBody).name).not.to.contain(/[\\W_]/);\r",
+									"});\r",
+									"\r",
+									"// name\r",
+									"pm.test(\"Check name included in response body \",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"name\")\r",
+									"})\r",
+									"pm.test(\"Check name not null \",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).name).to.not.equal(null)\r",
+									"})\r",
+									"pm.test(\"Check Board name as expected \",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"board_name\"))\r",
+									"})\r",
+									"//id\r",
+									"//check id isn't null\r",
+									"pm.test(\"check id isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).id).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check the responce contains aid proberity\r",
+									"pm.test(\"check id proberity exist whithen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"id\");\r",
+									"});\r",
+									"\r",
+									"//desc\r",
+									"\r",
+									"///////////////////////////////// closed ////////////////////////////////////////////////////////\r",
+									"//check closed isn't null\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check closed as expected\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"//check response have closed proberity\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"closed\");\r",
+									"});\r",
+									"\r",
+									"///////////////////////////// url ///////////////////////////////////////////////////////////////\r",
+									"//check url isn't null\r",
+									"pm.test(\"check url isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).url).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check the response have 'url' probirty\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"url\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"///////////////////////////// prefs /////////////////////////////////////////////////////////////\r",
+									"//check permissionLevel isn't null\r",
+									"pm.test(\"check permissionLevel isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.permissionLevel).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check permissionLevel probirty is in the response\r",
+									"pm.test(\"check permissionLevel probirty is in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.permissionLevel).to.equal(\"private\")\r",
+									"});\r",
+									"\r",
+									"//////////////////////////////////// hideVotes //////////////////////////////////////////////////\r",
+									"pm.test(\"check hideVotes isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.hideVotes).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"pm.test(\"check hideVotes response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.hideVotes).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"hideVotes\");\r",
+									"});\r",
+									"//////////////////////////////// voting //////////////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check voting isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.voting).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check voting response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.voting).to.equal(\"disabled\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"voting\");\r",
+									"});\r",
+									"/////////////////////////////// comments /////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check comments isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.comments).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check voting response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.comments).to.equal(\"members\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"                   //didn't send\r",
+									"///////////////////////////// invitations //////////////////////////////////////////////\r",
+									"pm.test(\"check invitations isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.invitations).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check invitations response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.invitations).to.equal(\"members\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"invitations exist in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"invitations\");\r",
+									"});\r",
+									"\r",
+									"///////////////////////////// selfJoin///////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check selfJoin isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.selfJoin).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check selfJoin response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.selfJoin).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"selfJoin exist in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"selfJoin\");\r",
+									"});\r",
+									"\r",
+									"////////////////////// cardCovers /////////////////////////////////////////////\r",
+									"pm.test(\"check cardcovers isn't null\",function(){\r",
+									"\r",
+									"pm.expect(JSON.parse(responseBody).prefs.cardCovers).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check cardCovers response value\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.cardCovers).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the cardCovers within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"cardCovers\");\r",
+									"})\r",
+									"\r",
+									"\r",
+									"////////////////////// isTemplate //////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check isTemplate isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.isTemplate).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check isTemplate response value\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.isTemplate).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the isTemplate within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"isTemplate\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"///////////////////   cardAging ///////////////////////////////////////////////\r",
+									"pm.test(\"check cardAging isn't null\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.cardAging).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check cardAging withen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.cardAging).to.equal(\"regular\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the cardAging within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"cardAging\");\r",
+									"});\r",
+									"\r",
+									"//////////////////////////// calendarFeedEnabled //////////////////////////\r",
+									"\r",
+									"pm.test(\"check calendarFeedEnabled isn't null\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.calendarFeedEnabled).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check calendarFeedEnabled withen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.calendarFeedEnabled).to.equal(\"false\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the calendarFeedEnabled within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"calendarFeedEnabled\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//////////////////////////////////////////////////////////////////////////////////////////\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"/*pm.test(\"check background value is blue\",function(){\r",
+									"\r",
+									"\r",
+									"});*/"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//////////////////////////////////////// method to generate random name\r",
+									"\r",
+									"function generateBoardName() {\r",
+									"  // Initialize the letters array.\r",
+									"  const letters = \"abcdefghijklmnopqrstuvwxyz\";\r",
+									"\r",
+									"  // Create a blank board name.\r",
+									"  let boardName = \"\";\r",
+									"\r",
+									"  // Loop through the letters array 5 times.\r",
+									"  for (let i = 0; i < 5; i++) {\r",
+									"    // Add a random letter to the board name.\r",
+									"    boardName += letters[Math.floor(Math.random() * letters.length)];\r",
+									"  }\r",
+									"\r",
+									"  // Return the board name.\r",
+									"  return boardName;\r",
+									"}\r",
+									"\r",
+									"// link it with name element\r",
+									"pm.collectionVariables.set(\"boardName\",generateBoardName());\r",
+									"\r",
+									"\r",
+									"////////////////////////////////////////////////////////////////////////////////////////////////////////"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/?name={{boardName}}&key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{boardName}}"
+								},
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "idOrganization",
+									"value": "6305d03e50d8f006eb36af6b",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2- Get a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check data that retrived the same of the one I insert in the previous API.\r",
+									"\r",
+									"//check name not null.\r",
+									"pm.test(\"check name is not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check the name as expected.\r",
+									"pm.test(\"check the name we get the same one that we add\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"board_name\"));\r",
+									"});\r",
+									"\r",
+									"//check that closed isn't null\r",
+									"pm.test(\"check that the closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//check that the closed is not null\r",
+									"pm.test(\"check the closed value backes as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(pm.collectionVariables.get(\"closed\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"//id\r",
+									"//check id isn't null\r",
+									"pm.test(\"check id isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).id).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check the responce contains aid proberity\r",
+									"pm.test(\"check id proberity exist whithen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"id\");\r",
+									"});\r",
+									"\r",
+									"//desc\r",
+									"\r",
+									"///////////////////////////////// closed ////////////////////////////////////////////////////////\r",
+									"//check closed isn't null\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check closed as expected\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"//check response have closed proberity\r",
+									"pm.test(\"check closed isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"closed\");\r",
+									"});\r",
+									"\r",
+									"///////////////////////////// url ///////////////////////////////////////////////////////////////\r",
+									"//check url isn't null\r",
+									"pm.test(\"check url isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).url).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check the response have 'url' probirty\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"url\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"///////////////////////////// prefs /////////////////////////////////////////////////////////////\r",
+									"//check permissionLevel isn't null\r",
+									"pm.test(\"check permissionLevel isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.permissionLevel).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check permissionLevel probirty is in the response\r",
+									"pm.test(\"check permissionLevel probirty is in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.permissionLevel).to.equal(\"private\")\r",
+									"});\r",
+									"\r",
+									"//////////////////////////////////// hideVotes //////////////////////////////////////////////////\r",
+									"pm.test(\"check hideVotes isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.hideVotes).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//\r",
+									"pm.test(\"check hideVotes response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.hideVotes).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"/*pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"hideVotes\");\r",
+									"});*/\r",
+									"//////////////////////////////// voting //////////////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check voting isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.voting).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check voting response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.voting).to.equal(\"disabled\");\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"voting\");\r",
+									"});*/\r",
+									"/////////////////////////////// comments /////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check comments isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.comments).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check voting response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.comments).to.equal(\"members\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"                   //didn't send\r",
+									"///////////////////////////// invitations //////////////////////////////////////////////\r",
+									"pm.test(\"check invitations isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.invitations).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check invitations response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.invitations).to.equal(\"members\");\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"invitations exist in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"invitations\");\r",
+									"});*/\r",
+									"\r",
+									"///////////////////////////// selfJoin///////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check selfJoin isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.selfJoin).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check selfJoin response value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.selfJoin).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"selfJoin exist in the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"selfJoin\");\r",
+									"});*/\r",
+									"\r",
+									"////////////////////// cardCovers /////////////////////////////////////////////\r",
+									"pm.test(\"check cardcovers isn't null\",function(){\r",
+									"\r",
+									"pm.expect(JSON.parse(responseBody).prefs.cardCovers).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check cardCovers response value\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.cardCovers).to.equal(true);\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"check the cardCovers within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"cardCovers\");\r",
+									"})*/\r",
+									"\r",
+									"\r",
+									"////////////////////// isTemplate //////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check isTemplate isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.isTemplate).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check isTemplate response value\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.isTemplate).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"check the isTemplate within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"isTemplate\");\r",
+									"});*/\r",
+									"\r",
+									"\r",
+									"///////////////////   cardAging ///////////////////////////////////////////////\r",
+									"pm.test(\"check cardAging isn't null\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.cardAging).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check cardAging withen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.cardAging).to.equal(\"regular\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"check the cardAging within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"cardAging\");\r",
+									"});*/\r",
+									"\r",
+									"//////////////////////////// calendarFeedEnabled //////////////////////////\r",
+									"\r",
+									"pm.test(\"check calendarFeedEnabled isn't null\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.calendarFeedEnabled).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check calendarFeedEnabled withen the response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.calendarFeedEnabled).to.equal(false);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"/*pm.test(\"check the calendarFeedEnabled within the response\",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"calendarFeedEnabled\");\r",
+									"});*/\r",
+									"\r",
+									"\r",
+									"////////////////////////////////prefs.switcherViews ////////////////////////////////////////////////////\r",
+									"\r",
+									"\r",
+									"\r",
+									"console.log(JSON.parse(responseBody).prefs.switcherViews.length) // 6\r",
+									"/*pm.test(\"check all switcherViews elements isn't null\",function(){\r",
+									" // check the array isn't empty\r",
+									"  if (JSON.parse(responseBody).prefs.switcherViews.length === 0) {\r",
+									"    console.log(\"The switcherViews array is empty.\");\r",
+									"    return;\r",
+									"  }\r",
+									"for(let i=0; JSON.parse(responseBody).prefs.switcherViews.length; i++){\r",
+									" pm.expect(JSON.parse(responseBody).prefs.switcherViews[i].viewType).to.not.equal(null);\r",
+									" pm.expect(JSON.parse(responseBody).prefs.switcherViews[i].enabled).to.not.equal(null);\r",
+									"\r",
+									"}\r",
+									"});*/\r",
+									"\r",
+									"\r",
+									"//      typeof >>>>>>>>>> checks if an object is defined    defined returns>>>string\r",
+									"                                                      //  undefined returns>>> undefined\r",
+									"pm.test(\"check all switcherViews elements isn't null\", function() {\r",
+									"  if (JSON.parse(responseBody).prefs.switcherViews.length === 0) {\r",
+									"    console.log(\"The switcherViews array is empty.\");\r",
+									"    return;\r",
+									"  }\r",
+									"\r",
+									"  for (let i = 0; typeof JSON.parse(responseBody).prefs.switcherViews[i] !== \"undefined\"; i++) {\r",
+									"    // Check the `viewType` property.\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.switcherViews[i].viewType).to.not.equal(null);\r",
+									"    // Check the `enabled` property.\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.switcherViews[i].enabled).to.not.equal(null);\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"////////////////////////////////prefs.switcherViews viewType as expected ////////////////////////////\r",
+									"\r",
+									"const viewTypevalues = [\"Board\", \"Table\", \"Calendar\", \"Dashboard\", \"Timeline\", \"Map\"];\r",
+									"\r",
+									"console.log(viewTypevalues[0]);\r",
+									"////////////////////////////////////////////////////////////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check all viewType elements as expected\", function() {\r",
+									"  if (JSON.parse(responseBody).prefs.switcherViews.length === 0) {\r",
+									"    console.log(\"The switcherViews array is empty.\");\r",
+									"    return;\r",
+									"  }\r",
+									"\r",
+									"  for (let i = 0; typeof JSON.parse(responseBody).prefs.switcherViews[i] !== \"undefined\"; i++) {\r",
+									"    // Check the `viewType` property.\r",
+									"    pm.expect(JSON.parse(responseBody).prefs.switcherViews[i].viewType).to.equal(viewTypevalues[i]);\r",
+									"    console.log(viewTypevalues[i]);\r",
+									"  }\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\r",
+									"\r",
+									"pm.test(\"check background value is blue\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.background).to.equal(\"blue\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check background value isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.background).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check backgroundTile value is blue\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.backgroundTile).to.equal(false);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check background value isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).prefs.backgroundTile).to.not.equal(null);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3- Update a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"//set the updated board name\r",
+									"console.log(JSON.parse(responseBody).name);\r",
+									"pm.collectionVariables.set(\"updated_board_name\",JSON.parse(responseBody).name);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id?name=board name updated&key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "board name updated",
+									"description": "updated value will be static."
+								},
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4- Get a Board Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"//check that the name is the updated one.\r",
+									"pm.test(\"check the name after update\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"updated_board_name\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5- Create a Label on a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// set lable id\r",
+									"pm.collectionVariables.set(\"lable_id\",JSON.parse(responseBody).id);\r",
+									"\r",
+									"//set lable name\r",
+									"pm.collectionVariables.set(\"lable_name\",JSON.parse(responseBody).name);\r",
+									"\r",
+									"//set color\r",
+									"pm.collectionVariables.set(\"color_value\",JSON.parse(responseBody).color);\r",
+									"\r",
+									"//set uses\r",
+									"pm.collectionVariables.set(\"uses_value\",JSON.parse(responseBody).uses);\r",
+									"\r",
+									"\r",
+									"\r",
+									"////////////////////////////////////////// name////////////////////////////////////////\r",
+									"//check board name not null\r",
+									"pm.test(\"check that the lable name isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check name as expected\r",
+									"pm.test(\"check the lable name as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"lable_name\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check name included in response body \",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"name\");\r",
+									"});\r",
+									"\r",
+									"\r",
+									"////////////////////////////////////// color ////////////////////////////////////////////\r",
+									"pm.test(\"check that the color lable name isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).color).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check name as expected\r",
+									"pm.test(\"check the color of lable as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).color).to.equal(pm.collectionVariables.get(\"color_value\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Check color included in response body \",function(){\r",
+									"    pm.expect(JSON.parse(responseBody)).have.property(\"color\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"/// name\r",
+									"\r",
+									"const alphabet = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+									"\r",
+									"function generateRandomLabel() {\r",
+									"  // Generate a random string of 3 to 10 characters.\r",
+									"  const labelLength = Math.floor(Math.random() * 8) + 3;\r",
+									"  let label = \"\";\r",
+									"  for (let i = 0; i < labelLength; i++) {\r",
+									"    const randomIndex = Math.floor(Math.random() * alphabet.length);\r",
+									"    label += alphabet[randomIndex];\r",
+									"  }\r",
+									"\r",
+									"  return label;\r",
+									"}\r",
+									"\r",
+									"pm.collectionVariables.set(\"lable_name_generated\",generateRandomLabel());\r",
+									"\r",
+									"\r",
+									"function getRandomColor() {\r",
+									"  const colors = [\"yellow\", \"purple\", \"blue\", \"red\", \"green\", \"orange\", \"black\", \"sky\", \"pink\", \"lime\"];\r",
+									"  const randomIndex = Math.floor(Math.random() * colors.length);\r",
+									"  return colors[randomIndex];\r",
+									"}\r",
+									"\r",
+									"pm.collectionVariables.set(\"colore_generated\",getRandomColor());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/labels?key={{key}}&token={{token}}&name={{lable_name_generated}}&color={{colore_generated}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"labels"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "name",
+									"value": "{{lable_name_generated}}"
+								},
+								{
+									"key": "color",
+									"value": "{{colore_generated}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6- Get a Label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check the name that backs the same of the one that inserted\r",
+									"pm.test(\"check the name that backs the same of the one that inserted\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"lable_name\"));\r",
+									"});\r",
+									"\r",
+									"// check the color that backs the same of the one that inserted\r",
+									"pm.test(\"check the name that backs the same of the one that inserted\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).color).to.equal(pm.collectionVariables.get(\"color_value\"));\r",
+									"});\r",
+									"\r",
+									"//check the uses value ,the same inserted value.\r",
+									"pm.test(\"check the uses value the same of the that inserted\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).uses).to.equal(pm.collectionVariables.get(\"uses_value\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//check the board id backes[the right board id]\r",
+									"pm.test(\"check the board id\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).idBoard).to.equal(pm.collectionVariables.get(\"boardid\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/labels/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{lable_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7- Get Labels on a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//check status code\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"check name isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"//check board id not null\r",
+									"pm.test(\"check id isn't null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).idBoard).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check lable_id that inserted exist in the list\",function(){\r",
+									"    let value=false;\r",
+									"   \r",
+									"    for(let i=0;i<JSON.parse(responseBody).length;i++)\r",
+									"    {\r",
+									"        console.log(JSON.parse(responseBody)[i].id)\r",
+									"        if(pm.collectionVariables.get(\"lable_id\") == JSON.parse(responseBody)[i].id)\r",
+									"        check=true;  \r",
+									"    }\r",
+									"    {pm.expect(value).to.equal(true)}\r",
+									"\r",
+									"  \r",
+									"}); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/labels?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"labels"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8- Update a Label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//set the value of updated name\r",
+									"pm.collectionVariables.set(\"updated_lable_name\",JSON.parse(responseBody).name);\r",
+									"\r",
+									"\r",
+									"//set value of updated \r",
+									"pm.collectionVariables.set(\"updated_color\",JSON.parse(responseBody).color);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/labels/:id?key={{key}}&token={{token}}&name=updated lable name&color=sky",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "name",
+									"value": "updated lable name",
+									"description": "the updated name will be static."
+								},
+								{
+									"key": "color",
+									"value": "sky",
+									"description": "the color will be static"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{lable_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9- Get a Label -after update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// check the name that backs the same of the one that updated\r",
+									"pm.test(\"check the name that backs the same of the one that inserted\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"updated_lable_name\"));\r",
+									"});\r",
+									"\r",
+									"// check the color that backs the same of the one that updated\r",
+									"pm.test(\"check the name that backs the same of the one that inserted\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).color).to.equal(pm.collectionVariables.get(\"updated_color\"));\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//check the board id backes[the right board id]\r",
+									"pm.test(\"check the board id\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).idBoard).to.equal(pm.collectionVariables.get(\"boardid\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/labels/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"labels",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{lable_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10- Update a field on a label",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/labels/:id/:field?key={{key}}&token={{token}}&name=tested",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"labels",
+								":id",
+								":field"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "name",
+									"value": "tested"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								},
+								{
+									"key": "field",
+									"value": "name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11- Delete a Label",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/labels/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"labels",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{lable_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12-Create a List on a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"list_id\",JSON.parse(responseBody).id);\r",
+									"pm.collectionVariables.set(\"list_name\",JSON.parse(responseBody).name);\r",
+									"pm.collectionVariables.set(\"closed_value\",JSON.parse(responseBody).closed);\r",
+									"pm.collectionVariables.set(\"pos\",JSON.parse(responseBody).pos);\r",
+									"\r",
+									"\r",
+									"pm.test(\"check the list name as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"list_name\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the list name not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check the list closed not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the list pos not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.not.equal(null);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// generate a list name \r",
+									"\r",
+									"const alphabet = \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\";\r",
+									"\r",
+									"function generateRandomName() {\r",
+									"  // Generate a random string of 3 to 10 characters.\r",
+									"  const nameLength = Math.floor(Math.random() * 8) + 3;\r",
+									"  let name = \"\";\r",
+									"  for (let i = 0; i < nameLength; i++) {\r",
+									"    const randomIndex = Math.floor(Math.random() * alphabet.length);\r",
+									"    name += alphabet[randomIndex];\r",
+									"  }\r",
+									"\r",
+									"  return name;\r",
+									"}\r",
+									"\r",
+									"pm.collectionVariables.set(\"list_name\",generateRandomName())"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists?name={{list_name}}&idBoard={{boardid}}&key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{list_name}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardid}}"
+								},
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "13- Get Lists on a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check the list name as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"list_name\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the list name not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check prorrty withen response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"name\");\r",
+									"\r",
+									"});\r",
+									"////////////////////// pos ///////////////////////\r",
+									"pm.test(\"check the pos as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.equal(pm.collectionVariables.get(\"pos\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check prorrty withen response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"pos\");\r",
+									"\r",
+									"});\r",
+									"\r",
+									"////////////////// closed /////////////////////////////////////////////\r",
+									"pm.test(\"check the closed value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(pm.collectionVariables.get(\"closed_value\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check prorrty withen response\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)).have.property(\"closed\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "14- Get filtered Lists on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/lists/:filter?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"lists",
+								":filter"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								},
+								{
+									"key": "filter",
+									"value": "closed"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "15-Update a List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.collectionVariables.set(\"updated_list_name\",JSON.parse(responseBody).name);\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"updated_list_closed\",JSON.parse(responseBody).closed);\r",
+									"\r",
+									"pm.collectionVariables.set(\"updated_pos\",JSON.parse(responseBody).pos);\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id?key={{key}}&token={{token}}&name=updated list name&closed=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "name",
+									"value": "updated list name"
+								},
+								{
+									"key": "closed",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "16- Get Lists on a Board Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check the list name as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"updated_list_name\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the list name not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.equal(pm.collectionVariables.get(\"updated_pos\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check the closed value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(pm.collectionVariables.get(\"updated_list_closed\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "17-Update a field on a List",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/:feild?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								":feild"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								},
+								{
+									"key": "feild",
+									"value": "name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "18- Get Lists on a Board -partch update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"check the list name as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.equal(pm.collectionVariables.get(\"updated_list_name\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the list name not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).name).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.equal(pm.collectionVariables.get(\"updated_pos\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"check the pos not null\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).pos).to.not.equal(null);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"check the closed value as expected\",function(){\r",
+									"pm.expect(JSON.parse(responseBody).closed).to.equal(pm.collectionVariables.get(\"updated_list_closed\"));\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "19- Delete a Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create to the board",
+			"item": [
+				{
+					"name": "Update showListGuide Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/showListGuide",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"showListGuide"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update showSidebar Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/showSidebar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"showSidebar"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update showSidebarActivity Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/showSidebarActivity",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"showSidebarActivity"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update showSidebarBoardActions Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/showSidebarBoardActions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"showSidebarBoardActions"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update showSidebarMembers Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/showSidebarMembers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"showSidebarMembers"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a calendarKey for a Board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/calendarKey/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"calendarKey",
+								"generate"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a emailKey for a Board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/emailKey/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"emailKey",
+								"generate"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Tag for a Board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/idTags",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"idTags"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Board as viewed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/markedAsViewed",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"markedAsViewed"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Enabled Power-Ups on Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/boardPlugins",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"boardPlugins"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get from the board",
+			"item": [
+				{
+					"name": "Get a field on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/:field",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								":field"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "field",
+									"value": "closed"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Actions of a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:boardId/actions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":boardId",
+								"actions"
+							],
+							"variable": [
+								{
+									"key": "boardId",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Card on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/cards/:idCard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"cards",
+								":idCard"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "idCard",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get boardStars on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:boardId/boardStars",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":boardId",
+								"boardStars"
+							],
+							"variable": [
+								{
+									"key": "boardId",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Checklists on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/checklists",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"checklists"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cards on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/cards",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"cards"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get filtered Cards on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/cards/:filter",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"cards",
+								":filter"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "filter",
+									"value": "visible"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Custom Fields for Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/customFields",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"customFields"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Labels",
+			"item": []
+		},
+		{
+			"name": "Lists",
+			"item": [
+				{
+					"name": "Get Actions for a List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"console.log(JSON.parse(responseBody)[0].data.list.name);\r",
+									"\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)[0].data.list.name).to.equal(pm.collectionVariables.get(\"updated_list_name\"));\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"\",function(){\r",
+									"pm.expect(JSON.parse(responseBody)[0].data.board.name).to.equal(pm.collectionVariables.get(\"updated_board_name\"));\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/actions?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								"actions"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the Board a List is on",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/board?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								"board"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cards in a List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/cards?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								"cards"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move List to Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/:value?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								":value"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								},
+								{
+									"key": "value",
+									"value": "{{boardid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move all Cards in List",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "/lists/:id/moveAllCards?key={{key}}&token={{token}}&idBoard={{boardid}}&idList",
+							"path": [
+								"lists",
+								":id",
+								"moveAllCards"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "idBoard",
+									"value": "{{boardid}}"
+								},
+								{
+									"key": "idList",
+									"value": null
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archive all Cards in List",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/lists/:id/archiveAllCards?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"lists",
+								":id",
+								"archiveAllCards"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{list_id}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Add a Member to a Board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/members/:idMember?key={{key}}&token={{token}}&type=admin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"members",
+								":idMember"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "type",
+									"value": "admin"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{boardid}}"
+								},
+								{
+									"key": "idMember",
+									"value": "6305d030b7049628b0440037"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Membership of Member on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/memberships/:idMembership?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"memberships",
+								":idMembership"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "idMembership",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invite Member to Board via email",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/members",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"members"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the Members of a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/members?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"members"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Member from Board",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/members/:idMember",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"members",
+								":idMember"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "idMember",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Memberships of a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/memberships?key={{key}}&token={{token}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"memberships"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a Member",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/members/:id?key={{key}}&token={{token}}&fullName=after updated&initials=upda",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"members",
+								":id"
+							],
+							"query": [
+								{
+									"key": "key",
+									"value": "{{key}}"
+								},
+								{
+									"key": "token",
+									"value": "{{token}}"
+								},
+								{
+									"key": "fullName",
+									"value": "after updated",
+									"description": "Vincent Kok"
+								},
+								{
+									"key": "initials",
+									"value": "upda"
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "58741382b99d086e2ceb0ba1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Emails",
+			"item": [
+				{
+					"name": "Update emailPosition Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/emailPosition",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"emailPosition"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update idEmailList Pref on a Board",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/myPrefs/idEmailList",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"myPrefs",
+								"idEmailList"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Power up",
+			"item": [
+				{
+					"name": "Disable a Power-Up on a Board",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/boardPlugins/:idPlugin",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"boardPlugins",
+								":idPlugin"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								},
+								{
+									"key": "idPlugin",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Power-Ups on a Board",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/plugins",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"plugins"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enable a Power-Up on a Board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/boards/:id/boardPlugins",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"boards",
+								":id",
+								"boardPlugins"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "5abbe4b7ddc1b351ef961414"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "key",
+			"value": "2ad662f7bb7b15d002a47937f855f462",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "12b294f47feb8ef6dc3092fbc4f76fe03a22edb5447a7ca26b2218daa1166bf6",
+			"type": "string"
+		},
+		{
+			"key": "boardName",
+			"value": ""
+		},
+		{
+			"key": "boardid",
+			"value": ""
+		},
+		{
+			"key": "board_name",
+			"value": ""
+		},
+		{
+			"key": "closed",
+			"value": ""
+		},
+		{
+			"key": "id_organization",
+			"value": ""
+		},
+		{
+			"key": "permission",
+			"value": ""
+		},
+		{
+			"key": "updated_board_name",
+			"value": ""
+		},
+		{
+			"key": "lable_id",
+			"value": ""
+		},
+		{
+			"key": "lable_name",
+			"value": ""
+		},
+		{
+			"key": "color_value",
+			"value": ""
+		},
+		{
+			"key": "list_name",
+			"value": ""
+		},
+		{
+			"key": "uses_value",
+			"value": ""
+		},
+		{
+			"key": "closed_value",
+			"value": ""
+		},
+		{
+			"key": "pos",
+			"value": ""
+		},
+		{
+			"key": "list_id",
+			"value": ""
+		},
+		{
+			"key": "updated_list_name",
+			"value": ""
+		},
+		{
+			"key": "updated_list_color",
+			"value": ""
+		},
+		{
+			"key": "updated_pos",
+			"value": ""
+		},
+		{
+			"key": "lable_name_generated",
+			"value": ""
+		},
+		{
+			"key": "updated_lable_name",
+			"value": ""
+		},
+		{
+			"key": "updated_color",
+			"value": ""
+		},
+		{
+			"key": "updated_list_closed",
+			"value": ""
+		},
+		{
+			"key": "colore_generated",
+			"value": ""
+		}
+	]
+}
